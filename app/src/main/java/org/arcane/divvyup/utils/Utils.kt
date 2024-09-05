@@ -1,6 +1,6 @@
 package org.arcane.divvyup.utils
 
-import org.arcane.divvyup.android.R
+import org.arcane.divvyup.R
 import org.arcane.divvyup.data.Expense
 import java.text.NumberFormat
 import java.text.ParseException

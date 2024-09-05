@@ -11,8 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class ExpenseConnector : Connector<Expense> {
+class ExpenseConnector : Connector<Expense>  {
+
+    @Inject
+    constructor()
 
     override fun <T : IIdentifier> getItem(identifier: T): Expense? {
         val db = FirebaseFirestore.getInstance()

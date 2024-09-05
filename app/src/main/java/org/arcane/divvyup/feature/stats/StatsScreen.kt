@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -70,13 +69,13 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
             )
         }
     }) {
-        val dataState = viewModel.entries.collectAsState(emptyList())
-        val topExpense = viewModel.topEntries.collectAsState(initial = emptyList())
+        val dataState = viewModel.entries
+        val topExpense = viewModel.topEntries
         Column(modifier = Modifier.padding(it)) {
-            val entries = viewModel.getEntriesForChart(dataState.value)
+            val entries = viewModel.getEntriesForChart(dataState)
             LineChart(entries = entries)
             Spacer(modifier = Modifier.height(16.dp))
-            TransactionList(Modifier, list = topExpense.value, "Top Spending", onSeeAllClicked = {})
+            TransactionList(Modifier, list = topExpense, "Top Spending", onSeeAllClicked = {})
         }
     }
 }

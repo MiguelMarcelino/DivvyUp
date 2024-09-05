@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,15 +41,15 @@ import org.arcane.divvyup.widget.ExpenseTextView
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel()) {
-    val state = viewModel.expenses.collectAsState(initial = emptyList())
+    val state = viewModel.expenses
     var filterType by remember { mutableStateOf("All") }
     var dateRange by remember { mutableStateOf("All Time") }
     var menuExpanded by remember { mutableStateOf(false) }
 
     val filteredTransactions = when (filterType) {
-        "Expense" -> state.value.filter { it.type == "Expense" }
-        "Income" -> state.value.filter { it.type == "Income" }
-        else -> state.value
+        "Expense" -> state.filter { it.type == "Expense" }
+        "Income" -> state.filter { it.type == "Income" }
+        else -> state
     }
 
     val filteredByDateRange = filteredTransactions.filter { transaction ->
