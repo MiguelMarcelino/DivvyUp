@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.codewithfk.expensetracker.android"
+    namespace = "org.arcane.divvyup"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.codewithfk.expensetracker.android"
+        applicationId = "org.arcane.divvyup"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation(libs.firebase.database.ktx)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     implementation(libs.dagger.hilt.andriod)
     kapt(libs.dagger.hilt.compiler)
