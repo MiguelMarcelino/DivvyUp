@@ -43,7 +43,6 @@ import org.arcane.divvyup.widget.ExpenseTextView
 import org.arcane.divvyup.base.HomeNavigationEvent
 import org.arcane.divvyup.base.NavigationEvent
 import org.arcane.divvyup.data.Expense
-import org.arcane.divvyup.data.model.ExpenseType
 import org.arcane.divvyup.ui.theme.Green
 import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Red
@@ -106,7 +105,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                 )
             }
 
-            val state = viewModel.expenses
+            val state = viewModel.getExpenses()
             val expense = viewModel.getTotalExpense(state)
             val income = viewModel.getTotalIncome(state)
             val balance = viewModel.getBalance(state)

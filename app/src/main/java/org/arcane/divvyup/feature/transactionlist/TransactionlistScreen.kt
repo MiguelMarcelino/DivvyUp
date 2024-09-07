@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.arcane.divvyup.R
-import org.arcane.divvyup.data.model.ExpenseType
 import org.arcane.divvyup.feature.add_expense.ExpenseDropDown
 import org.arcane.divvyup.feature.home.TransactionItem
 import org.arcane.divvyup.utils.Utils
@@ -42,7 +41,7 @@ import org.arcane.divvyup.widget.ExpenseTextView
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel()) {
-    val state = viewModel.expenses
+    val state = viewModel.getExpenses()
     var filterType by remember { mutableStateOf("All") }
     var dateRange by remember { mutableStateOf("All Time") }
     var menuExpanded by remember { mutableStateOf(false) }

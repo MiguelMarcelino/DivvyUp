@@ -9,12 +9,10 @@ import org.arcane.divvyup.dbconnector.ExpenseConnector
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.arcane.divvyup.data.Expense
-import org.arcane.divvyup.data.model.ExpenseType
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(expenseConnector: ExpenseConnector) : BaseViewModel() {
-    val expenses = expenseConnector.getItems()
+class HomeViewModel @Inject constructor(private val expenseConnector: ExpenseConnector) : BaseViewModel() {
 
     override fun onEvent(event: UiEvent) {
         when (event) {
@@ -30,6 +28,11 @@ class HomeViewModel @Inject constructor(expenseConnector: ExpenseConnector) : Ba
                 }
             }
         }
+    }
+
+    fun getExpenses(): List<Expense> {
+        // TODO: Get only expenses by user
+        return expenseConnector.getItems()
     }
 
     fun getBalance(list: List<Expense>): String {

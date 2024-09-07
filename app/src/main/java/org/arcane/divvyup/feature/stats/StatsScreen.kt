@@ -69,8 +69,8 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
             )
         }
     }) {
-        val dataState = viewModel.entries
-        val topExpense = viewModel.topEntries
+        val dataState = viewModel.getExpenses()
+        val topExpense = viewModel.getTopExpenses()
         Column(modifier = Modifier.padding(it)) {
             val entries = viewModel.getEntriesForChart(dataState)
             LineChart(entries = entries)
