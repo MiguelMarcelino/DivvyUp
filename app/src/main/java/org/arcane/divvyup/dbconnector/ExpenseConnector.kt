@@ -13,10 +13,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class ExpenseConnector : Connector<Expense>  {
-
-    @Inject
-    constructor()
+class ExpenseConnector @Inject constructor() : Connector<Expense>  {
 
     override fun <T : IIdentifier> getItem(identifier: T): Expense? {
         val db = FirebaseFirestore.getInstance()
@@ -62,6 +59,7 @@ class ExpenseConnector : Connector<Expense>  {
             title = item.title,
             amount = item.amount,
             type = item.type,
+            recurrence = item.recurrence,
             description = item.description,
             currency = item.currency,
             status = item.status,

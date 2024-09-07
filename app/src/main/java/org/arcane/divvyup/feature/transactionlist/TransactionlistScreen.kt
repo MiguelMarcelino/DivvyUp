@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.arcane.divvyup.R
-import org.arcane.divvyup.feature.add_expense.ExpenseDropDown
+import org.arcane.divvyup.feature.add_expense.DropDownMenu
 import org.arcane.divvyup.feature.home.TransactionItem
 import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.feature.home.HomeViewModel
@@ -114,7 +114,7 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
                     ) {
                         Column {
                             // Type Filter Dropdown
-                            ExpenseDropDown(
+                            DropDownMenu(
                                 listOfItems = listOf("All", "Expense", "Income"),
                                 onItemSelected = { selected ->
                                     filterType = selected
@@ -125,7 +125,7 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
                             Spacer(modifier = Modifier.height(8.dp))
 
                             // Date Range Filter Dropdown
-                            ExpenseDropDown(
+                            DropDownMenu(
                                 listOfItems = listOf( "Yesterday", "Today", "Last 30 Days", "Last 90 Days", "Last Year"),
                                 onItemSelected = { selected ->
                                     dateRange = selected

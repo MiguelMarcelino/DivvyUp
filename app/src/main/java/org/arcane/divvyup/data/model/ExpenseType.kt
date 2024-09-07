@@ -1,15 +1,16 @@
 package org.arcane.divvyup.data.model
 
-enum class ExpenseType(expenseName: String) {
+enum class ExpenseType(val expenseName: String) {
     INCOME("Income") {
         override fun value(): Int = 1
     },
     GYM("Gym"),
     FOOD("Food"),
-    TRANSPORT("Transport"),
+    TRANSPORTATION("Transportation"),
     ENTERTAINMENT("Entertainment"),
     SHOPPING("Shopping"),
     UTILITIES("Utilities"),
+    SUBSCRIPTION("Subscription"),
     OTHER("Other");
 
     /**

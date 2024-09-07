@@ -3,6 +3,7 @@ package org.arcane.divvyup.data
 import com.google.firebase.Timestamp
 import org.arcane.divvyup.data.identifiers.UserIdentifier
 import org.arcane.divvyup.data.model.ExpenseType
+import org.arcane.divvyup.data.model.Recurrence
 import java.util.UUID
 
 data class Expense(
@@ -10,6 +11,7 @@ data class Expense(
     var title: String,
     var amount: Double,
     var type: ExpenseType,
+    var recurrence: Recurrence?,
     var description: String?,
     var currency: String,
     var status: String,
@@ -25,6 +27,7 @@ data class Expense(
         title = "",
         amount = 0.0,
         type = ExpenseType.OTHER,
+        recurrence = null,
         description = "",
         currency = "",
         status = "",
@@ -40,6 +43,7 @@ data class Expense(
         title: String,
         amount: Double,
         type: ExpenseType,
+        recurrence: Recurrence?,
         description: String?,
         currency: String,
         status: String,
@@ -53,6 +57,7 @@ data class Expense(
         uid = UUID.randomUUID().toString(),
         amount = amount,
         type = type,
+        recurrence = recurrence,
         description = description,
         currency = currency,
         status = status,

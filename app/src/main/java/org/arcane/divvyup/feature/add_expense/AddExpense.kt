@@ -2,16 +2,23 @@
 
 package org.arcane.divvyup.feature.add_expense
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -31,6 +38,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableLongState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +62,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Timestamp
 import org.arcane.divvyup.R
 import org.arcane.divvyup.base.AddExpenseNavigationEvent
 import org.arcane.divvyup.base.NavigationEvent
@@ -62,7 +72,11 @@ import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Typography
 import org.arcane.divvyup.widget.ExpenseTextView
 import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.model.RecurrenceInterval
 import org.arcane.divvyup.data.model.ExpenseType
+import org.arcane.divvyup.data.model.Recurrence
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun AddExpense(
@@ -179,10 +193,20 @@ fun DataForm(
     val type = remember {
         mutableStateOf("OTHER")
     }
+    val isRecurrent = remember {
+        mutableStateOf(false)
+    }
+    val recurrenceInterval = remember {
+        mutableStateOf(RecurrenceInterval.DAILY)
+    }
+    val recurrenceDate = remember {
+        mutableLongStateOf(0L)
+    }
     Column(
         modifier = modifier
             .padding(16.dp)
             .fillMaxWidth()
+            .fillMaxHeight()
             .shadow(16.dp)
             .clip(
                 RoundedCornerShape(16.dp)
@@ -190,6 +214,8 @@ fun DataForm(
             .background(Color.White)
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
+            .heightIn(min = 800.dp)
+            .animateContentSize()
     ) {
         TitleComponent(title = "name")
         OutlinedTextField(
@@ -210,7 +236,7 @@ fun DataForm(
         )
         Spacer(modifier = Modifier.size(24.dp))
         TitleComponent(title = "type")
-        ExpenseDropDown(
+        DropDownMenu(
             ExpenseType.entries.map { it.name },
             onItemSelected = {
                 type.value = it
@@ -248,20 +274,63 @@ fun DataForm(
             )
         )
         Spacer(modifier = Modifier.size(24.dp))
-        TitleComponent("date")
-        OutlinedTextField(value = if (date.longValue == 0L) "" else Utils.formatDateToHumanReadableForm(
-            date.longValue
-        ),
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { dateDialogVisibility.value = true },
-            enabled = false,
-            colors = OutlinedTextFieldDefaults.colors(
-                disabledBorderColor = Color.Black, disabledTextColor = Color.Black,
-                disabledPlaceholderColor = Color.Black,
-            ),
-            placeholder = { ExpenseTextView(text = "Select date") })
+        TitleComponent(title = "Recurrent Expense")
+        DropDownMenu(
+            listOf("No", "Yes"),
+            onItemSelected = {
+                isRecurrent.value = it == "Yes"
+            })
+        Spacer(modifier = Modifier.size(24.dp))
+        when(isRecurrent.value) {
+            true -> {
+                modifier.heightIn(min = 800.dp)
+                // Recurrence Interval
+                TitleComponent("interval")
+                DropDownMenu(
+                    RecurrenceInterval.entries.map { it.expenseName },
+                    onItemSelected = {
+                        recurrenceInterval.value = RecurrenceInterval.valueOf(it.uppercase(Locale.getDefault()))
+                    },)
+                Spacer(modifier = Modifier.size(24.dp))
+                // End date
+                TitleComponent("end date")
+                OutlinedTextField(
+                    value = if (recurrenceDate.longValue == 0L) "" else Utils.formatDateToHumanReadableForm(
+                        recurrenceDate.longValue
+                    ),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { dateDialogVisibility.value = true },
+                    enabled = false,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        disabledBorderColor = Color.Black, disabledTextColor = Color.Black,
+                        disabledPlaceholderColor = Color.Black,
+                    ),
+                    placeholder = { ExpenseTextView(text = "Select date") }
+                )
+            }
+            false -> {
+                // Single date
+                TitleComponent("date")
+                OutlinedTextField(
+                    value = if (date.longValue == 0L) "" else Utils.formatDateToHumanReadableForm(
+                        date.longValue
+                    ),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { dateDialogVisibility.value = true },
+                    enabled = false,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        disabledBorderColor = Color.Black, disabledTextColor = Color.Black,
+                        disabledPlaceholderColor = Color.Black,
+                    ),
+                    placeholder = { ExpenseTextView(text = "Select date") }
+                )
+                modifier.height(500.dp)
+            }
+        }
         Spacer(modifier = Modifier.size(24.dp))
         Button(
             onClick = {
@@ -269,6 +338,12 @@ fun DataForm(
                     title = name.value,
                     amount = amount.value.toDoubleOrNull() ?: 0.0,
                     type = type.value.let { ExpenseType.valueOf(it) },
+                    recurrence = Recurrence(
+                        interval = recurrenceInterval.value,
+                        endDate = Timestamp(
+                            Date(recurrenceDate.longValue)
+                        )
+                    ),
                     description = name.value,
                     currency = "",
                     status = "",
@@ -276,7 +351,7 @@ fun DataForm(
                     expenseShare = mapOf(),
                     ownerUid = "",
                     groupUid = "",
-                    userUids = listOf()
+                    userUids = listOf(),
                 )
                 onAddExpenseClick(model)
             }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp)
@@ -289,13 +364,19 @@ fun DataForm(
         }
     }
     if (dateDialogVisibility.value) {
-        ExpenseDatePickerDialog(onDateSelected = {
-            date.longValue = it
-            dateDialogVisibility.value = false
-        }, onDismiss = {
-            dateDialogVisibility.value = false
-        })
+        val dateToSet = if(isRecurrent.value) recurrenceDate else date
+        setDate(dateToSet, dateDialogVisibility)
     }
+}
+
+@Composable
+fun setDate(date: MutableLongState, dateDialogVisibility: MutableState<Boolean>) {
+    ExpenseDatePickerDialog(onDateSelected = {
+        date.longValue = it
+        dateDialogVisibility.value = false
+    }, onDismiss = {
+        dateDialogVisibility.value = false
+    })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -331,7 +412,7 @@ fun TitleComponent(title: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseDropDown(listOfItems: List<String>, onItemSelected: (item: String) -> Unit) {
+fun DropDownMenu(listOfItems: List<String>, onItemSelected: (item: String) -> Unit) {
     val expanded = remember {
         mutableStateOf(false)
     }
