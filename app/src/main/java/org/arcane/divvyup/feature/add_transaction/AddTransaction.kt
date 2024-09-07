@@ -1,10 +1,9 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package org.arcane.divvyup.feature.add_expense
+package org.arcane.divvyup.feature.add_transaction
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,8 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -70,10 +67,10 @@ import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.ui.theme.InterFontFamily
 import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Typography
-import org.arcane.divvyup.widget.ExpenseTextView
-import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.widget.TransactionTextView
+import org.arcane.divvyup.data.Transaction
 import org.arcane.divvyup.data.model.RecurrenceInterval
-import org.arcane.divvyup.data.model.ExpenseType
+import org.arcane.divvyup.data.model.TransactionType
 import org.arcane.divvyup.data.model.Recurrence
 import java.util.Date
 import java.util.Locale
@@ -119,7 +116,7 @@ fun AddExpense(
                         .clickable {
                             viewModel.onEvent(AddExpenseUiEvent.OnBackPressed)
                         })
-                ExpenseTextView(
+                TransactionTextView(
                     text = "New balance",
                     style = Typography.titleLarge,
                     color = Color.White,
@@ -142,7 +139,7 @@ fun AddExpense(
                         onDismissRequest = { menuExpanded.value = false }
                     ) {
                         DropdownMenuItem(
-                            text = { ExpenseTextView(text = "Profile") },
+                            text = { TransactionTextView(text = "Profile") },
                             onClick = {
                                 menuExpanded.value = false
                                 // Navigate to profile screen
@@ -150,7 +147,7 @@ fun AddExpense(
                             }
                         )
                         DropdownMenuItem(
-                            text = { ExpenseTextView(text = "Settings") },
+                            text = { TransactionTextView(text = "Settings") },
                             onClick = {
                                 menuExpanded.value = false
                                 // Navigate to settings screen
@@ -175,7 +172,7 @@ fun AddExpense(
 @Composable
 fun DataForm(
     modifier: Modifier,
-    onAddExpenseClick: (model: Expense) -> Unit
+    onAddExpenseClick: (model: Transaction) -> Unit
 ) {
 
     val name = remember {
@@ -225,7 +222,7 @@ fun DataForm(
             }, textStyle = TextStyle(color = Color.Black),
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            placeholder = { ExpenseTextView(text = "Enter Name") },
+            placeholder = { TransactionTextView(text = "Enter Name") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Black,
                 unfocusedBorderColor = Color.Black,
@@ -237,7 +234,7 @@ fun DataForm(
         Spacer(modifier = Modifier.size(24.dp))
         TitleComponent(title = "type")
         DropDownMenu(
-            ExpenseType.entries.map { it.name },
+            TransactionType.entries.map { it.name },
             onItemSelected = {
                 type.value = it
             })
@@ -264,7 +261,7 @@ fun DataForm(
             },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholder = { ExpenseTextView(text = "Enter amount") },
+            placeholder = { TransactionTextView(text = "Enter amount") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Black,
                 unfocusedBorderColor = Color.Black,
@@ -307,7 +304,7 @@ fun DataForm(
                         disabledBorderColor = Color.Black, disabledTextColor = Color.Black,
                         disabledPlaceholderColor = Color.Black,
                     ),
-                    placeholder = { ExpenseTextView(text = "Select date") }
+                    placeholder = { TransactionTextView(text = "Select date") }
                 )
             }
             false -> {
@@ -326,7 +323,7 @@ fun DataForm(
                         disabledBorderColor = Color.Black, disabledTextColor = Color.Black,
                         disabledPlaceholderColor = Color.Black,
                     ),
-                    placeholder = { ExpenseTextView(text = "Select date") }
+                    placeholder = { TransactionTextView(text = "Select date") }
                 )
                 modifier.height(500.dp)
             }
@@ -334,10 +331,10 @@ fun DataForm(
         Spacer(modifier = Modifier.size(24.dp))
         Button(
             onClick = {
-                val model = Expense(
+                val model = Transaction(
                     title = name.value,
                     amount = amount.value.toDoubleOrNull() ?: 0.0,
-                    type = type.value.let { ExpenseType.valueOf(it) },
+                    type = type.value.let { TransactionType.valueOf(it) },
                     recurrence = Recurrence(
                         interval = recurrenceInterval.value,
                         endDate = Timestamp(
@@ -348,7 +345,7 @@ fun DataForm(
                     currency = "",
                     status = "",
                     tags = listOf(),
-                    expenseShare = mapOf(),
+                    share = mapOf(),
                     ownerUid = "",
                     groupUid = "",
                     userUids = listOf(),
@@ -356,7 +353,7 @@ fun DataForm(
                 onAddExpenseClick(model)
             }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp)
         ) {
-            ExpenseTextView(
+            TransactionTextView(
                 text = "Add Expense",
                 fontSize = 14.sp,
                 color = Color.White
@@ -388,11 +385,11 @@ fun ExpenseDatePickerDialog(
     val selectedDate = datePickerState.selectedDateMillis ?: 0L
     DatePickerDialog(onDismissRequest = { onDismiss() }, confirmButton = {
         TextButton(onClick = { onDateSelected(selectedDate) }) {
-            ExpenseTextView(text = "Confirm")
+            TransactionTextView(text = "Confirm")
         }
     }, dismissButton = {
         TextButton(onClick = { onDateSelected(selectedDate) }) {
-            ExpenseTextView(text = "Cancel")
+            TransactionTextView(text = "Cancel")
         }
     }) {
         DatePicker(state = datePickerState)
@@ -401,7 +398,7 @@ fun ExpenseDatePickerDialog(
 
 @Composable
 fun TitleComponent(title: String) {
-    ExpenseTextView(
+    TransactionTextView(
         text = title.uppercase(),
         fontSize = 12.sp,
         fontWeight = FontWeight.Medium,
@@ -444,7 +441,7 @@ fun DropDownMenu(listOfItems: List<String>, onItemSelected: (item: String) -> Un
         )
         ExposedDropdownMenu(expanded = expanded.value, onDismissRequest = { }) {
             listOfItems.forEach {
-                DropdownMenuItem(text = { ExpenseTextView(text = it) }, onClick = {
+                DropdownMenuItem(text = { TransactionTextView(text = it) }, onClick = {
                     selectedItem.value = it
                     onItemSelected(selectedItem.value)
                     expanded.value = false

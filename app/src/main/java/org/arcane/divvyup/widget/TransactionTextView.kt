@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.TextUnit
 import org.arcane.divvyup.ui.theme.InterFontFamily
 
 @Composable
-fun ExpenseTextView(
+fun TransactionTextView(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,

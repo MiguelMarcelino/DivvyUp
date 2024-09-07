@@ -5,18 +5,18 @@ import org.arcane.divvyup.base.BaseViewModel
 import org.arcane.divvyup.base.HomeNavigationEvent
 import org.arcane.divvyup.base.UiEvent
 import org.arcane.divvyup.utils.Utils
-import org.arcane.divvyup.dbconnector.ExpenseConnector
+import org.arcane.divvyup.dbconnector.TransactionConnector
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.Transaction
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val expenseConnector: ExpenseConnector) : BaseViewModel() {
+class HomeViewModel @Inject constructor(private val transactionConnector: TransactionConnector) : BaseViewModel() {
 
     override fun onEvent(event: UiEvent) {
         when (event) {
-            is HomeUiEvent.OnAddExpenseClicked -> {
+            is HomeUiEvent.OnAddTransactionClicked -> {
                 viewModelScope.launch {
                     _navigationEvent.emit(HomeNavigationEvent.NavigateToAddExpense)
                 }
@@ -30,12 +30,12 @@ class HomeViewModel @Inject constructor(private val expenseConnector: ExpenseCon
         }
     }
 
-    fun getExpenses(): List<Expense> {
+    fun getTransactions(): List<Transaction> {
         // TODO: Get only expenses by user
-        return expenseConnector.getItems()
+        return transactionConnector.getItems()
     }
 
-    fun getBalance(list: List<Expense>): String {
+    fun getBalance(list: List<Transaction>): String {
         var balance = 0.0
         for (expense in list) {
             if (expense.type.value() > 0) {
@@ -47,22 +47,22 @@ class HomeViewModel @Inject constructor(private val expenseConnector: ExpenseCon
         return Utils.formatCurrency(balance)
     }
 
-    fun getTotalExpense(list: List<Expense>): String {
+    fun getTotalAmount(list: List<Transaction>): String {
         var total = 0.0
-        for (expense in list) {
-            if (expense.type.value() < 0) {
-                total += expense.amount
+        for (transaction in list) {
+            if (transaction.type.value() < 0) {
+                total += transaction.amount
             }
         }
 
         return Utils.formatCurrency(total)
     }
 
-    fun getTotalIncome(list: List<Expense>): String {
+    fun getTotalIncome(list: List<Transaction>): String {
         var totalIncome = 0.0
-        for (expense in list) {
-            if (expense.type.value() > 0) {
-                totalIncome += expense.amount
+        for (transaction in list) {
+            if (transaction.type.value() > 0) {
+                totalIncome += transaction.amount
             }
         }
         return Utils.formatCurrency(totalIncome)
@@ -70,7 +70,6 @@ class HomeViewModel @Inject constructor(private val expenseConnector: ExpenseCon
 }
 
 sealed class HomeUiEvent : UiEvent() {
-    data object OnAddExpenseClicked : HomeUiEvent()
-    data object OnAddIncomeClicked : HomeUiEvent()
+    data object OnAddTransactionClicked : HomeUiEvent()
     data object OnSeeAllClicked : HomeUiEvent()
 }

@@ -1,6 +1,6 @@
 package org.arcane.divvyup.dbconnector
 
-import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.Transaction
 import org.arcane.divvyup.data.identifiers.GroupIdentifier
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
@@ -12,21 +12,21 @@ import kotlinx.coroutines.tasks.await
 
 object GroupExpenseConnector {
 
-    fun getExpenseForGroup(groupIdentifier: GroupIdentifier): List<Expense> {
+    fun getExpenseForGroup(groupIdentifier: GroupIdentifier): List<Transaction> {
         // Get all expenses for a group
         val db = FirebaseFirestore.getInstance()
-        val deferred = CompletableDeferred<List<Expense>>()
+        val deferred = CompletableDeferred<List<Transaction>>()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val documents = db.collection("expenses")
+                val documents = db.collection("transactions")
                     .whereEqualTo("groupId", groupIdentifier.uid)
                     .get()
                     .await()
-                val expenses = documents.map { document ->
-                    document.toObject(Expense::class.java)
+                val expens = documents.map { document ->
+                    document.toObject(Transaction::class.java)
                 }
-                deferred.complete(expenses)
+                deferred.complete(expens)
             } catch (e: Exception) {
                 deferred.completeExceptionally(e)
             }

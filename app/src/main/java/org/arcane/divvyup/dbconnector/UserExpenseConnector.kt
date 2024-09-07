@@ -11,7 +11,7 @@ object UserExpenseConnector {
         // Get all expenses for a user
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("expenses")
+        db.collection("transactions")
             .whereEqualTo("userId", userIdentifier.uid)
             .get()
             .addOnSuccessListener { documents ->

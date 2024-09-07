@@ -2,7 +2,7 @@ package org.arcane.divvyup.dbconnector
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.Transaction
 import org.arcane.divvyup.data.identifiers.IIdentifier
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
@@ -13,17 +13,17 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class ExpenseConnector @Inject constructor() : Connector<Expense>  {
+class TransactionConnector @Inject constructor() : Connector<Transaction>  {
 
-    override fun <T : IIdentifier> getItem(identifier: T): Expense? {
+    override fun <T : IIdentifier> getItem(identifier: T): Transaction? {
         val db = FirebaseFirestore.getInstance()
-        val deferred = CompletableDeferred<Expense?>()
+        val deferred = CompletableDeferred<Transaction?>()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val document = db.collection("expenses").document(identifier.uid).get().await()
-                val expense = document.toObject(Expense::class.java)
-                deferred.complete(expense)
+                val document = db.collection("transactions").document(identifier.uid).get().await()
+                val transaction = document.toObject(Transaction::class.java)
+                deferred.complete(transaction)
             } catch (e: Exception) {
                 deferred.completeExceptionally(e)
             }
@@ -32,17 +32,17 @@ class ExpenseConnector @Inject constructor() : Connector<Expense>  {
         return runBlocking { deferred.await() }
     }
 
-    override fun getItems(): List<Expense> {
+    override fun getItems(): List<Transaction> {
         val db = FirebaseFirestore.getInstance()
-        val deferred = CompletableDeferred<List<Expense>>()
+        val deferred = CompletableDeferred<List<Transaction>>()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val documents = db.collection("expenses").get().await()
-                val expenses = documents.map { document ->
-                    document.toObject(Expense::class.java)
+                val documents = db.collection("transactions").get().await()
+                val transaction = documents.map { document ->
+                    document.toObject(Transaction::class.java)
                 }
-                deferred.complete(expenses)
+                deferred.complete(transaction)
             } catch (e: Exception) {
                 deferred.completeExceptionally(e)
             }
@@ -51,11 +51,11 @@ class ExpenseConnector @Inject constructor() : Connector<Expense>  {
         return runBlocking { deferred.await() }
     }
 
-    override fun addItem(item: Expense) {
+    override fun addItem(item: Transaction) {
         val db = FirebaseFirestore.getInstance()
 
-        // Create a new expense object
-        val expense = Expense(
+        // Create a new transaction object
+        val transaction = Transaction(
             title = item.title,
             amount = item.amount,
             type = item.type,
@@ -64,15 +64,15 @@ class ExpenseConnector @Inject constructor() : Connector<Expense>  {
             currency = item.currency,
             status = item.status,
             tags = item.tags,
-            expenseShare = item.expenseShare,
+            share = item.share,
             ownerUid = item.ownerUid,
             groupUid = item.groupUid,
             userUids = item.userUids,
         )
 
         // Add a new document with a generated ID
-        db.collection("expenses")
-            .add(expense)
+        db.collection("transactions")
+            .add(transaction)
             .addOnSuccessListener {
                 Log.d(TAG, "Expense added successfully")
             }
@@ -81,7 +81,7 @@ class ExpenseConnector @Inject constructor() : Connector<Expense>  {
             }
     }
 
-    override fun updateItem(item: Expense) {
+    override fun updateItem(item: Transaction) {
         val db = FirebaseFirestore.getInstance()
 
         // Create a map of fields to update
@@ -96,7 +96,7 @@ class ExpenseConnector @Inject constructor() : Connector<Expense>  {
         item.groupUid.let { updates["groupId"] = it }
 
         // Update the document
-        db.collection("expenses")
+        db.collection("transaction")
             .document(item.uid)
             .update(updates)
             .addOnSuccessListener {
@@ -111,7 +111,7 @@ class ExpenseConnector @Inject constructor() : Connector<Expense>  {
         val db = FirebaseFirestore.getInstance()
 
         // Delete the document with the specified ID
-        db.collection("expenses")
+        db.collection("transaction")
             .document(identifier.uid)
             .delete()
             .addOnSuccessListener {

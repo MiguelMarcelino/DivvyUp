@@ -1,7 +1,7 @@
 package org.arcane.divvyup.utils
 
 import org.arcane.divvyup.R
-import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.Transaction
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -56,7 +56,7 @@ object Utils {
         return date.time
     }
 
-    fun getItemIcon(item: Expense): Int {
+    fun getItemIcon(item: Transaction): Int {
         return if (item.title == "Paypal") {
             R.drawable.ic_paypal
         } else if (item.title == "Netflix") {

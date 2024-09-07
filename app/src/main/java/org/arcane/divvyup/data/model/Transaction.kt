@@ -1,22 +1,21 @@
 package org.arcane.divvyup.data
 
 import com.google.firebase.Timestamp
-import org.arcane.divvyup.data.identifiers.UserIdentifier
-import org.arcane.divvyup.data.model.ExpenseType
+import org.arcane.divvyup.data.model.TransactionType
 import org.arcane.divvyup.data.model.Recurrence
 import java.util.UUID
 
-data class Expense(
+data class Transaction(
     var uid: String,
     var title: String,
     var amount: Double,
-    var type: ExpenseType,
+    var type: TransactionType,
     var recurrence: Recurrence?,
     var description: String?,
     var currency: String,
     var status: String,
     var tags: List<String>,
-    var expenseShare: Map<String, Double>?,
+    var share: Map<String, Double>?,
     var ownerUid: String,
     var groupUid: String,
     var userUids: List<String>,
@@ -26,13 +25,13 @@ data class Expense(
         uid = UUID.randomUUID().toString(),
         title = "",
         amount = 0.0,
-        type = ExpenseType.OTHER,
+        type = TransactionType.OTHER,
         recurrence = null,
         description = "",
         currency = "",
         status = "",
         tags = listOf(),
-        expenseShare = mapOf(),
+        share = mapOf(),
         ownerUid = "",
         groupUid = "",
         userUids = listOf(),
@@ -42,13 +41,13 @@ data class Expense(
     constructor(
         title: String,
         amount: Double,
-        type: ExpenseType,
+        type: TransactionType,
         recurrence: Recurrence?,
         description: String?,
         currency: String,
         status: String,
         tags: List<String>,
-        expenseShare: Map<String, Double>?,
+        share: Map<String, Double>?,
         ownerUid: String,
         groupUid: String,
         userUids: List<String>
@@ -62,7 +61,7 @@ data class Expense(
         currency = currency,
         status = status,
         tags = tags,
-        expenseShare = expenseShare,
+        share = share,
         ownerUid = ownerUid,
         groupUid = groupUid,
         userUids = userUids,

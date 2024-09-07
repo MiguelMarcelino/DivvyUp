@@ -1,9 +1,6 @@
 package org.arcane.divvyup.data.model
 
-enum class ExpenseType(val expenseName: String) {
-    INCOME("Income") {
-        override fun value(): Int = 1
-    },
+enum class TransactionType(val transactionName: String) {
     GYM("Gym"),
     FOOD("Food"),
     TRANSPORTATION("Transportation"),
@@ -11,7 +8,21 @@ enum class ExpenseType(val expenseName: String) {
     SHOPPING("Shopping"),
     UTILITIES("Utilities"),
     SUBSCRIPTION("Subscription"),
-    OTHER("Other");
+    OTHER("Other"),
+
+    // TODO: Split into separate IncomeType
+    SALARY("Salary") {
+        override fun value(): Int = 1
+     },
+    BONUS("Bonus") {
+        override fun value(): Int = 1
+    },
+    GIFT("Gift") {
+        override fun value(): Int = 1
+    },
+    REFUND("Refund") {
+        override fun value(): Int = 1
+    };
 
     /**
      * Designates the value of each Expense type. By default, it is negative,
@@ -21,4 +32,3 @@ enum class ExpenseType(val expenseName: String) {
      */
     open fun value(): Int = -1
 }
-

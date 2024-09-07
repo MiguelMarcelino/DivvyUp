@@ -1,4 +1,4 @@
-package org.arcane.divvyup.feature.add_expense
+package org.arcane.divvyup.feature.add_transaction
 
 import androidx.lifecycle.viewModelScope
 import org.arcane.divvyup.base.AddExpenseNavigationEvent
@@ -9,17 +9,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.arcane.divvyup.data.Expense
-import org.arcane.divvyup.dbconnector.ExpenseConnector
+import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.dbconnector.TransactionConnector
 import javax.inject.Inject
 
 @HiltViewModel
-class AddExpenseViewModel @Inject constructor(private val expenseConnector: ExpenseConnector) : BaseViewModel() {
+class AddExpenseViewModel @Inject constructor(private val transactionConnector: TransactionConnector) : BaseViewModel() {
 
 
-    private fun addExpense(expenseEntity: Expense): Boolean {
+    private fun addExpense(transactionEntity: Transaction): Boolean {
         return try {
-            expenseConnector.addItem(expenseEntity)
+            transactionConnector.addItem(transactionEntity)
             true
         } catch (ex: Throwable) {
             false
@@ -31,7 +31,7 @@ class AddExpenseViewModel @Inject constructor(private val expenseConnector: Expe
             is AddExpenseUiEvent.OnAddExpenseClicked -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
-                        val result = addExpense(event.expenseEntity)
+                        val result = addExpense(event.transactionEntity)
                         if (result) {
                             _navigationEvent.emit(NavigationEvent.NavigateBack)
                         }
@@ -55,7 +55,7 @@ class AddExpenseViewModel @Inject constructor(private val expenseConnector: Expe
 }
 
 sealed class AddExpenseUiEvent : UiEvent() {
-    data class OnAddExpenseClicked(val expenseEntity: Expense) : AddExpenseUiEvent()
+    data class OnAddExpenseClicked(val transactionEntity: Transaction) : AddExpenseUiEvent()
     data object OnBackPressed : AddExpenseUiEvent()
     data object OnMenuClicked : AddExpenseUiEvent()
 }

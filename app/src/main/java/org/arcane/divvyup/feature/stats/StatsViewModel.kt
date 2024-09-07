@@ -1,22 +1,21 @@
 package org.arcane.divvyup.feature.stats
 
-import android.R.attr
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.utils.EntryXComparator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.arcane.divvyup.base.BaseViewModel
 import org.arcane.divvyup.base.UiEvent
-import org.arcane.divvyup.data.Expense
-import org.arcane.divvyup.dbconnector.ExpenseConnector
+import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.dbconnector.TransactionConnector
 import java.util.Collections
 import javax.inject.Inject
 
 
 @HiltViewModel
-class StatsViewModel @Inject constructor(private val expenseConnector: ExpenseConnector) : BaseViewModel() {
-    fun getEntriesForChart(entries: List<Expense>): List<Entry> {
+class StatsViewModel @Inject constructor(private val transactionConnector: TransactionConnector) : BaseViewModel() {
+    fun getEntriesForChart(entries: List<Transaction>): List<Entry> {
         val list = mutableListOf<Entry>()
-        for (entry in entries) {
+        entries.filter { it.type.value() < 0 }.forEach{entry ->
             val formattedDate = entry.createdAt.nanoseconds
             list.add(Entry(formattedDate.toFloat(), entry.amount.toFloat()))
         }
@@ -31,14 +30,14 @@ class StatsViewModel @Inject constructor(private val expenseConnector: ExpenseCo
     override fun onEvent(event: UiEvent) {
     }
 
-    fun getExpenses(): List<Expense> {
+    fun getTransactions(): List<Transaction> {
         // TODO: Get only expenses by user
-        return expenseConnector.getItems()
+        return transactionConnector.getItems()
     }
 
-    fun getTopExpenses(): List<Expense> {
+    fun getTopExpenses(): List<Transaction> {
         // TODO: Get top expenses by user
-        return expenseConnector.getItems().sortedBy { it.amount }.take(5)
+        return transactionConnector.getItems().filter { it.type.value() < 0 }.sortedBy { it.amount }.take(5)
     }
 }
 

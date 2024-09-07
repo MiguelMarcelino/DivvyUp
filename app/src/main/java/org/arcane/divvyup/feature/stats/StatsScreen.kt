@@ -28,7 +28,7 @@ import androidx.navigation.NavController
 import org.arcane.divvyup.R
 import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.feature.home.TransactionList
-import org.arcane.divvyup.widget.ExpenseTextView
+import org.arcane.divvyup.widget.TransactionTextView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -53,7 +53,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                 },
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.outline)
             )
-            ExpenseTextView(
+            TransactionTextView(
                 text = "Statistics",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
@@ -69,7 +69,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
             )
         }
     }) {
-        val dataState = viewModel.getExpenses()
+        val dataState = viewModel.getTransactions()
         val topExpense = viewModel.getTopExpenses()
         Column(modifier = Modifier.padding(it)) {
             val entries = viewModel.getEntriesForChart(dataState)
@@ -93,7 +93,7 @@ fun LineChart(entries: List<Entry>) {
     ) { view ->
         val lineChart = view.findViewById<LineChart>(R.id.lineChart)
 
-        val dataSet = LineDataSet(entries, "Expenses").apply {
+        val dataSet = LineDataSet(entries, "Transactions").apply {
             color = android.graphics.Color.parseColor("#FF2F7E79")
             valueTextColor = android.graphics.Color.BLACK
             lineWidth = 3f
@@ -106,7 +106,6 @@ fun LineChart(entries: List<Entry>) {
             drawable?.let {
                 fillDrawable = it
             }
-
         }
 
         lineChart.xAxis.valueFormatter =

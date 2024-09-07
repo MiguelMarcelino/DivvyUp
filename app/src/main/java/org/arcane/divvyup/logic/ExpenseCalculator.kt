@@ -2,7 +2,7 @@ package org.arcane.divvyup.logic
 
 import org.arcane.divvyup.data.Balance
 import org.arcane.divvyup.data.Debt
-import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.Transaction
 import org.arcane.divvyup.data.User
 import org.arcane.divvyup.data.identifiers.GroupIdentifier
 
@@ -10,7 +10,7 @@ class ExpenseCalculator {
 
     fun calculateBalances(
         users: List<User>,
-        expenses: List<Expense>,
+        expens: List<Transaction>,
         groupId: GroupIdentifier
     ): List<Balance> {
         // A map to store each user's balance
@@ -22,7 +22,7 @@ class ExpenseCalculator {
         }
 
         // Calculate total expense and each user's contribution
-        expenses.filter { it.groupUid == groupId.uid }.forEach { expense ->
+        expens.filter { it.groupUid == groupId.uid }.forEach { expense ->
             val ownerUid = expense.ownerUid
             // The owner is owed the value of the expense
             userBalances[ownerUid] =
@@ -41,10 +41,10 @@ class ExpenseCalculator {
         return userBalances.map { Balance(it.key, it.value) }
     }
 
-    fun calculateDebt(expense: Expense): List<Debt> {
+    fun calculateDebt(transaction: Transaction): List<Debt> {
         val userBalances = mutableMapOf<String, Double>()
 
-        val userIdentifiers = expense.userUids
+        val userIdentifiers = transaction.userUids
 
         // Initialize balances for each user
         userIdentifiers.forEach { userUid ->
@@ -52,17 +52,17 @@ class ExpenseCalculator {
         }
 
         // Calculate each user's net balance
-        if (expense.expenseShare != null) {
-            expense.expenseShare!!.forEach { (userId, sharePercentage) ->
-                val shareAmount = expense.amount * sharePercentage
+        if (transaction.share != null) {
+            transaction.share!!.forEach { (userId, sharePercentage) ->
+                val shareAmount = transaction.amount * sharePercentage
                 userBalances[userId] = userBalances[userId]?.minus(shareAmount) ?: -shareAmount
-                userBalances[expense.ownerUid] =
-                    userBalances[expense.ownerUid]?.plus(shareAmount) ?: shareAmount
+                userBalances[transaction.ownerUid] =
+                    userBalances[transaction.ownerUid]?.plus(shareAmount) ?: shareAmount
             }
         } else {
             // If expenseShare is null, the owner pays the total amount
-            userBalances[expense.ownerUid] =
-                userBalances[expense.ownerUid]?.plus(expense.amount) ?: expense.amount
+            userBalances[transaction.ownerUid] =
+                userBalances[transaction.ownerUid]?.plus(transaction.amount) ?: transaction.amount
         }
 
         // Calculate total expense and fair share per user
@@ -78,12 +78,12 @@ class ExpenseCalculator {
         return calculateDebtsFromBalance(userBalances)
     }
 
-    fun calculateAllDebts(expenses: List<Expense>): List<Debt> {
+    fun calculateAllDebts(expens: List<Transaction>): List<Debt> {
         val aggregateDebts = mutableListOf<Debt>()
         val userBalances = mutableMapOf<String, Double>()
 
         // Calculate debts for each expense and aggregate them
-        expenses.forEach { expense ->
+        expens.forEach { expense ->
             val debts = calculateDebt(expense)
             aggregateDebts.addAll(debts)
         }

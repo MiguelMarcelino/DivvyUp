@@ -1,15 +1,16 @@
 package org.arcane.divvyup.logic
 
-import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.Transaction
 import org.arcane.divvyup.data.User
 import org.arcane.divvyup.data.identifiers.GroupIdentifier
 import com.google.firebase.Timestamp
 import org.arcane.divvyup.data.Debt
-import org.arcane.divvyup.data.model.ExpenseType
+import org.arcane.divvyup.data.model.TransactionType
+import org.arcane.divvyup.data.model.Recurrence
 import org.junit.Test
 import kotlin.math.abs
 
-class ExpenseCalculatorTest {
+class TransactionCalculatorTest {
 
     @Test
     fun calculateBalancesTest() {
@@ -34,34 +35,34 @@ class ExpenseCalculatorTest {
             )
         )
 
-        val expenses = listOf(
-            Expense(
+        val expens = listOf(
+            Transaction(
                 uid = "1",
                 title = "Dinner",
                 amount = 100.0,
-                type = ExpenseType.FOOD,
-                isRecurrent = false,
+                type = TransactionType.FOOD,
+                recurrence = Recurrence(),
                 description = "Dinner",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("food"),
-                expenseShare = mapOf("1" to 0.5, "2" to 0.5),
+                share = mapOf("1" to 0.5, "2" to 0.5),
                 ownerUid = "1",
                 groupUid = "1",
                 userUids = listOf("1", "2"),
                 createdAt = Timestamp.now()
             ),
-            Expense(
+            Transaction(
                 uid = "2",
                 title = "Taxi",
                 amount = 50.0,
-                type = ExpenseType.TRANSPORT,
-                isRecurrent = false,
+                type = TransactionType.TRANSPORTATION,
+                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("transportation"),
-                expenseShare = mapOf("1" to 0.5, "2" to 0.5),
+                share = mapOf("1" to 0.5, "2" to 0.5),
                 ownerUid = "2",
                 groupUid = "1",
                 userUids = listOf("1", "2"),
@@ -71,7 +72,7 @@ class ExpenseCalculatorTest {
 
         val expenseCalculator = ExpenseCalculator()
 
-        val balances = expenseCalculator.calculateBalances(users, expenses, GroupIdentifier("1"))
+        val balances = expenseCalculator.calculateBalances(users, expens, GroupIdentifier("1"))
 
         assert(balances.size == 2)
         assert(balances[0].amount == 25.0)
@@ -92,34 +93,34 @@ class ExpenseCalculatorTest {
             )
         )
 
-        val expenses = listOf(
-            Expense(
+        val expens = listOf(
+            Transaction(
                 uid = "1",
                 title = "Dinner",
                 amount = 100.0,
-                type = ExpenseType.FOOD,
-                isRecurrent = false,
+                type = TransactionType.FOOD,
+                recurrence = Recurrence(),
                 description = "Dinner",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("food"),
-                expenseShare = mapOf("1" to 0.5, "2" to 0.5),
+                share = mapOf("1" to 0.5, "2" to 0.5),
                 ownerUid = "1",
                 groupUid = "1",
                 userUids = listOf("1", "2"),
                 createdAt = Timestamp.now()
             ),
-            Expense(
+            Transaction(
                 uid = "1",
                 title = "Taxi",
                 amount = 50.0,
-                type = ExpenseType.TRANSPORT,
-                isRecurrent = false,
+                type = TransactionType.TRANSPORTATION,
+                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("transportation"),
-                expenseShare = mapOf("1" to 0.5, "2" to 0.5),
+                share = mapOf("1" to 0.5, "2" to 0.5),
                 ownerUid = "1",
                 groupUid = "1",
                 userUids = listOf("1", "2"),
@@ -129,7 +130,7 @@ class ExpenseCalculatorTest {
 
         val expenseCalculator = ExpenseCalculator()
 
-        val balances = expenseCalculator.calculateBalances(users, expenses, GroupIdentifier("1"))
+        val balances = expenseCalculator.calculateBalances(users, expens, GroupIdentifier("1"))
 
         assert(balances.size == 1)
         assert(balances[0].amount == 0.0)
@@ -149,11 +150,11 @@ class ExpenseCalculatorTest {
             )
         )
 
-        val expenses = listOf<Expense>()
+        val expens = listOf<Transaction>()
 
         val expenseCalculator = ExpenseCalculator()
 
-        val balances = expenseCalculator.calculateBalances(users, expenses, GroupIdentifier("1"))
+        val balances = expenseCalculator.calculateBalances(users, expens, GroupIdentifier("1"))
 
         assert(balances.size == 1)
         assert(balances[0].amount == 0.0)
@@ -163,34 +164,34 @@ class ExpenseCalculatorTest {
     fun calculateDebtTest() {
         // For simplicity, we gave names to user IDs
         // John = 1, Jane = 2, Bob = 3
-        val expenses = listOf(
-            Expense(
+        val expens = listOf(
+            Transaction(
                 uid = "1",
                 title = "Dinner",
                 amount = 50.0,
-                type = ExpenseType.FOOD,
-                isRecurrent = false,
+                type = TransactionType.FOOD,
+                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("transportation"),
-                expenseShare = null,
+                share = null,
                 ownerUid = "1",
                 groupUid = "1",
                 userUids = listOf("1", "2", "3"),
                 createdAt = Timestamp.now()
             ),
-            Expense(
+            Transaction(
                 uid = "2",
                 title = "Taxi",
                 amount = 50.0,
-                type = ExpenseType.FOOD,
-                isRecurrent = false,
+                type = TransactionType.FOOD,
+                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("transportation"),
-                expenseShare = null,
+                share = null,
                 ownerUid = "2",
                 groupUid = "1",
                 userUids = listOf("1", "2", "3"),
@@ -200,7 +201,7 @@ class ExpenseCalculatorTest {
 
         val expenseCalculator = ExpenseCalculator()
 
-        val debts = expenseCalculator.calculateAllDebts(expenses)
+        val debts = expenseCalculator.calculateAllDebts(expens)
 
         // Since Bob owes both John and Jane, the calculation should go as follows
         val bobOwedTotal = 100.0 / 3
@@ -228,18 +229,18 @@ class ExpenseCalculatorTest {
     fun calculateBalancesAndSettleTest() {
         // For simplicity, we gave names to user IDs
         // John = 1, Jane = 2, Bob = 3
-        val expenses = listOf(
-            Expense(
+        val expens = listOf(
+            Transaction(
                 uid = "1",
                 title = "Dinner",
                 amount = 100.0,
-                type = ExpenseType.FOOD,
-                isRecurrent = false,
+                type = TransactionType.FOOD,
+                recurrence = Recurrence(),
                 description = "Dinner",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("food"),
-                expenseShare = mapOf(
+                share = mapOf(
                     "1" to 0.4,  // John pays 40%
                     "2" to 0.4,  // Jane pays 40%
                     "3" to 0.2   // Bob pays 20%
@@ -249,17 +250,17 @@ class ExpenseCalculatorTest {
                 userUids = listOf("1", "2", "3"),
                 createdAt = Timestamp.now()
             ),
-            Expense(
+            Transaction(
                 uid = "2",
                 title = "Taxi",
                 amount = 50.0,
-                type = ExpenseType.TRANSPORT,
-                isRecurrent = false,
+                type = TransactionType.TRANSPORTATION,
+                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
                 tags = listOf("transport"),
-                expenseShare = mapOf(
+                share = mapOf(
                     "1" to 0.4,  // John pays 40%
                     "2" to 0.2,  // Jane pays 20%
                     "3" to 0.4   // Bob pays 40%
@@ -274,7 +275,7 @@ class ExpenseCalculatorTest {
         val expenseCalculator = ExpenseCalculator()
 
         val debts =
-            expenseCalculator.calculateAllDebts(expenses)
+            expenseCalculator.calculateAllDebts(expens)
 
         // Expected debts:
         // John paid 100 euros
