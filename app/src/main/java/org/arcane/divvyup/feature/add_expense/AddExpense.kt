@@ -206,14 +206,13 @@ fun DataForm(
                 disabledBorderColor = Color.Black, disabledTextColor = Color.Black,
                 disabledPlaceholderColor = Color.Black,
                 focusedTextColor = Color.Black,
-            )Ω
+            )
         )
         Spacer(modifier = Modifier.size(24.dp))
         TitleComponent(title = "type")
         ExpenseDropDown(
             ExpenseType.entries.map { it.name },
             onItemSelected = {
-                name.value = it
                 type.value = it
             })
         Spacer(modifier = Modifier.size(24.dp))
