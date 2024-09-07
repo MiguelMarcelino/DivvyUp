@@ -54,13 +54,9 @@ fun NavHostScreen() {
                 HomeScreen(navController)
             }
 
-            composable(route = "/add_income") {
-                bottomBarVisibility = false
-                AddExpense(navController, isIncome = true)
-            }
             composable(route = "/add_exp") {
                 bottomBarVisibility = false
-                AddExpense(navController, isIncome = false)
+                AddExpense(navController)
             }
 
             composable(route = "/stats") {

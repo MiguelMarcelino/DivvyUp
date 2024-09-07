@@ -62,11 +62,11 @@ import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Typography
 import org.arcane.divvyup.widget.ExpenseTextView
 import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.model.ExpenseType
 
 @Composable
 fun AddExpense(
     navController: NavController,
-    isIncome: Boolean,
     viewModel: AddExpenseViewModel = hiltViewModel()
 ) {
     val menuExpanded = remember { mutableStateOf(false) }
@@ -106,7 +106,7 @@ fun AddExpense(
                             viewModel.onEvent(AddExpenseUiEvent.OnBackPressed)
                         })
                 ExpenseTextView(
-                    text = "Add ${if (isIncome) "Income" else "Expense"}",
+                    text = "New balance",
                     style = Typography.titleLarge,
                     color = Color.White,
                     modifier = Modifier
@@ -153,7 +153,7 @@ fun AddExpense(
                 end.linkTo(parent.end)
             }, onAddExpenseClick = {
                 viewModel.onEvent(AddExpenseUiEvent.OnAddExpenseClicked(it))
-            }, isIncome)
+            })
         }
     }
 }
@@ -161,8 +161,7 @@ fun AddExpense(
 @Composable
 fun DataForm(
     modifier: Modifier,
-    onAddExpenseClick: (model: Expense) -> Unit,
-    isIncome: Boolean
+    onAddExpenseClick: (model: Expense) -> Unit
 ) {
 
     val name = remember {
@@ -178,7 +177,7 @@ fun DataForm(
         mutableStateOf(false)
     }
     val type = remember {
-        mutableStateOf(if (isIncome) "Income" else "Expense")
+        mutableStateOf("OTHER")
     }
     Column(
         modifier = modifier
@@ -193,37 +192,29 @@ fun DataForm(
             .verticalScroll(rememberScrollState())
     ) {
         TitleComponent(title = "name")
+        OutlinedTextField(
+            value = name.value,
+            onValueChange = { newValue ->
+                name.value = newValue
+            }, textStyle = TextStyle(color = Color.Black),
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            placeholder = { ExpenseTextView(text = "Enter Name") },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black,
+                disabledBorderColor = Color.Black, disabledTextColor = Color.Black,
+                disabledPlaceholderColor = Color.Black,
+                focusedTextColor = Color.Black,
+            )Ω
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+        TitleComponent(title = "type")
         ExpenseDropDown(
-            if (isIncome) listOf(
-                "Paypal",
-                "Salary",
-                "Freelance",
-                "Investments",
-                "Bonus",
-                "Rental Income",
-                "Other Income"
-            ) else listOf(
-                "Grocery",
-                "Netflix",
-                "Rent",
-                "Paypal",
-                "Starbucks",
-                "Shopping",
-                "Transport",
-                "Utilities",
-                "Dining Out",
-                "Entertainment",
-                "Healthcare",
-                "Insurance",
-                "Subscriptions",
-                "Education",
-                "Debt Payments",
-                "Gifts & Donations",
-                "Travel",
-                "Other Expenses"
-            ),
+            ExpenseType.entries.map { it.name },
             onItemSelected = {
                 name.value = it
+                type.value = it
             })
         Spacer(modifier = Modifier.size(24.dp))
         TitleComponent("amount")
@@ -278,7 +269,7 @@ fun DataForm(
                 val model = Expense(
                     title = name.value,
                     amount = amount.value.toDoubleOrNull() ?: 0.0,
-                    type = type.value,
+                    type = type.value.let { ExpenseType.valueOf(it) },
                     description = name.value,
                     currency = "",
                     status = "",
@@ -292,7 +283,7 @@ fun DataForm(
             }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp)
         ) {
             ExpenseTextView(
-                text = "Add ${if (isIncome) "Income" else "Expense"}",
+                text = "Add Expense",
                 fontSize = 14.sp,
                 color = Color.White
             )
@@ -386,6 +377,6 @@ fun ExpenseDropDown(listOfItems: List<String>, onItemSelected: (item: String) ->
 @Preview(showBackground = true)
 @Composable
 fun PreviewAddExpense() {
-    AddExpense(rememberNavController(), true)
+    AddExpense(rememberNavController())
 }
 

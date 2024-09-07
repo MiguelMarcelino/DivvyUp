@@ -9,6 +9,7 @@ import org.arcane.divvyup.dbconnector.ExpenseConnector
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.model.ExpenseType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,12 +24,6 @@ class HomeViewModel @Inject constructor(expenseConnector: ExpenseConnector) : Ba
                 }
             }
 
-            is HomeUiEvent.OnAddIncomeClicked -> {
-                viewModelScope.launch {
-                    _navigationEvent.emit(HomeNavigationEvent.NavigateToAddIncome)
-                }
-            }
-
             is HomeUiEvent.OnSeeAllClicked -> {
                 viewModelScope.launch {
                     _navigationEvent.emit(HomeNavigationEvent.NavigateToSeeAll)
@@ -40,7 +35,7 @@ class HomeViewModel @Inject constructor(expenseConnector: ExpenseConnector) : Ba
     fun getBalance(list: List<Expense>): String {
         var balance = 0.0
         for (expense in list) {
-            if (expense.type == "Income") {
+            if (expense.type.value() > 0) {
                 balance += expense.amount
             } else {
                 balance -= expense.amount
@@ -52,7 +47,7 @@ class HomeViewModel @Inject constructor(expenseConnector: ExpenseConnector) : Ba
     fun getTotalExpense(list: List<Expense>): String {
         var total = 0.0
         for (expense in list) {
-            if (expense.type != "Income") {
+            if (expense.type.value() < 0) {
                 total += expense.amount
             }
         }
@@ -63,7 +58,7 @@ class HomeViewModel @Inject constructor(expenseConnector: ExpenseConnector) : Ba
     fun getTotalIncome(list: List<Expense>): String {
         var totalIncome = 0.0
         for (expense in list) {
-            if (expense.type == "Income") {
+            if (expense.type.value() > 0) {
                 totalIncome += expense.amount
             }
         }

@@ -56,8 +56,8 @@ class AddExpenseViewModel @Inject constructor(private val expenseConnector: Expe
 
 sealed class AddExpenseUiEvent : UiEvent() {
     data class OnAddExpenseClicked(val expenseEntity: Expense) : AddExpenseUiEvent()
-    object OnBackPressed : AddExpenseUiEvent()
-    object OnMenuClicked : AddExpenseUiEvent()
+    data object OnBackPressed : AddExpenseUiEvent()
+    data object OnMenuClicked : AddExpenseUiEvent()
 }
 
 

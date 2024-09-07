@@ -2,13 +2,14 @@ package org.arcane.divvyup.data
 
 import com.google.firebase.Timestamp
 import org.arcane.divvyup.data.identifiers.UserIdentifier
+import org.arcane.divvyup.data.model.ExpenseType
 import java.util.UUID
 
 data class Expense(
     var uid: String,
     var title: String,
     var amount: Double,
-    var type: String,
+    var type: ExpenseType,
     var description: String?,
     var currency: String,
     var status: String,
@@ -23,7 +24,7 @@ data class Expense(
         uid = UUID.randomUUID().toString(),
         title = "",
         amount = 0.0,
-        type = "",
+        type = ExpenseType.OTHER,
         description = "",
         currency = "",
         status = "",
@@ -38,7 +39,7 @@ data class Expense(
     constructor(
         title: String,
         amount: Double,
-        type: String,
+        type: ExpenseType,
         description: String?,
         currency: String,
         status: String,

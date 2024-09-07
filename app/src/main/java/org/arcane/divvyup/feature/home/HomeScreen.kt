@@ -1,6 +1,5 @@
 package org.arcane.divvyup.feature.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +43,7 @@ import org.arcane.divvyup.widget.ExpenseTextView
 import org.arcane.divvyup.base.HomeNavigationEvent
 import org.arcane.divvyup.base.NavigationEvent
 import org.arcane.divvyup.data.Expense
+import org.arcane.divvyup.data.model.ExpenseType
 import org.arcane.divvyup.ui.theme.Green
 import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Red
@@ -60,10 +59,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                 NavigationEvent.NavigateBack -> navController.popBackStack()
                 HomeNavigationEvent.NavigateToSeeAll -> {
                     navController.navigate("/all_transactions")
-                }
-
-                HomeNavigationEvent.NavigateToAddIncome -> {
-                    navController.navigate("/add_income")
                 }
 
                 HomeNavigationEvent.NavigateToAddExpense -> {
@@ -145,11 +140,9 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                         end.linkTo(parent.end)
                     }, contentAlignment = Alignment.BottomEnd
             ) {
-                MultiFloatingActionButton(modifier = Modifier, {
+                MultiFloatingActionButton(modifier = Modifier) {
                     viewModel.onEvent(HomeUiEvent.OnAddExpenseClicked)
-                }, {
-                    viewModel.onEvent(HomeUiEvent.OnAddIncomeClicked)
-                })
+                }
             }
         }
     }
@@ -158,8 +151,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
 @Composable
 fun MultiFloatingActionButton(
     modifier: Modifier,
-    onAddExpenseClicked: () -> Unit,
-    onAddIncomeClicked: () -> Unit
+    onAddExpenseClicked: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -168,42 +160,6 @@ fun MultiFloatingActionButton(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Secondary FABs
-            AnimatedVisibility(visible = expanded) {
-                Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(16.dp)) {
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .background(color = Zinc, shape = RoundedCornerShape(12.dp))
-                            .clickable {
-                                onAddIncomeClicked.invoke()
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_income),
-                            contentDescription = "Add Income",
-                            tint = Color.White
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .background(color = Zinc, shape = RoundedCornerShape(12.dp))
-                            .clickable {
-                                onAddExpenseClicked.invoke()
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_expense),
-                            contentDescription = "Add Expense",
-                            tint = Color.White
-                        )
-                    }
-                }
-            }
             // Main FAB
             Box(
                 modifier = Modifier
@@ -212,7 +168,7 @@ fun MultiFloatingActionButton(
                     .clip(RoundedCornerShape(16.dp))
                     .background(color = Zinc)
                     .clickable {
-                        expanded = !expanded
+                        onAddExpenseClicked.invoke()
                     },
                 contentAlignment = Alignment.Center
             ) {
@@ -322,14 +278,14 @@ fun TransactionList(
         items(items = list,
             key = { item -> item.uid }) { item ->
             val icon = Utils.getItemIcon(item)
-            val amount = if (item.type == "Income") item.amount else item.amount * -1
+            val amount = item.amount * item.type.value()
 
             TransactionItem(
                 title = item.title,
                 amount = Utils.formatCurrency(amount),
                 icon = icon,
                 date = item.createdAt.toString(),
-                color = if (item.type == "Income") Green else Red,
+                color = if (item.type.value() > 0) Green else Red,
                 Modifier
             )
         }

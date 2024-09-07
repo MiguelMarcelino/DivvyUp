@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.arcane.divvyup.R
+import org.arcane.divvyup.data.model.ExpenseType
 import org.arcane.divvyup.feature.add_expense.ExpenseDropDown
 import org.arcane.divvyup.feature.home.TransactionItem
 import org.arcane.divvyup.utils.Utils
@@ -47,8 +48,8 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
     var menuExpanded by remember { mutableStateOf(false) }
 
     val filteredTransactions = when (filterType) {
-        "Expense" -> state.filter { it.type == "Expense" }
-        "Income" -> state.filter { it.type == "Income" }
+        "Expense" -> state.filter { it.type.value() < 0 }
+        "Income" -> state.filter { it.type.value() > 0 }
         else -> state
     }
 
@@ -143,7 +144,7 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
                         amount = item.amount.toString(),
                         icon = icon!!,
                         date = item.createdAt.toString(),
-                        color = if (item.type == "Income") Color.Green else Color.Red,
+                        color = if (item.type.value() > 0) Color.Green else Color.Red,
                         Modifier.animateItemPlacement(tween(100))
                     )
                 }
