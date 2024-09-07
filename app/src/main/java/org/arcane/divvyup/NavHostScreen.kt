@@ -20,7 +20,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.arcane.divvyup.R
 import org.arcane.divvyup.feature.add_expense.AddExpense
 import org.arcane.divvyup.feature.home.HomeScreen
 import org.arcane.divvyup.feature.stats.StatsScreen

@@ -33,3 +33,6 @@ google-services.json
 # Android Profiling
 *.hprof
 /.idea/
+
+# Firebase Configuration
+google-services.json
