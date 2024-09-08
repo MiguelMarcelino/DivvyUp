@@ -283,7 +283,7 @@ fun TransactionList(
                 title = item.title,
                 amount = Utils.formatCurrency(amount),
                 icon = icon,
-                date = item.createdAt.toString(),
+                date = Utils.formatDateToHumanReadableForm(item.createdAt.seconds*1000),
                 color = if (item.type.value() > 0) Green else Red,
                 Modifier
             )
