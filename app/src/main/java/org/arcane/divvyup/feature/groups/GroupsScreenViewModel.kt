@@ -28,6 +28,10 @@ class GroupsScreenViewModel @Inject constructor(private val groupConnector: Grou
         return groupConnector.getItems()
     }
 
+    fun searchGroupsByName(name: String): List<Group> {
+        return groupConnector.searchItems(name)
+    }
+
 }
 
 sealed class GroupsUiEvent : UiEvent() {

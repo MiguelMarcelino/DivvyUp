@@ -13,4 +13,5 @@ interface Connector<A> {
     fun updateItem(item: A)
 
     fun <T : IIdentifier> deleteItem(identifier: T)
+    fun searchItems(names: String): List<A>
 }

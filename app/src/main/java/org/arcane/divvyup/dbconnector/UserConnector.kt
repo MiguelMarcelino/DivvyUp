@@ -100,4 +100,8 @@ object UserConnector: Connector<User> {
                 Log.w(ContentValues.TAG, "Error deleting user", e)
             }
     }
+
+    override fun searchItems(names: String): List<User> {
+        TODO("Not yet implemented")
+    }
 }

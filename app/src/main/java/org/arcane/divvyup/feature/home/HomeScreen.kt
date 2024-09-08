@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -295,11 +296,12 @@ fun TransactionItem(
     color: Color,
     modifier: Modifier
 ) {
-
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp))
+            .background(Color.White, shape = RoundedCornerShape(8.dp))
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -322,6 +324,7 @@ fun TransactionItem(
             color = color
         )
     }
+    Spacer(modifier = Modifier.size(16.dp))
 }
 
 @Composable

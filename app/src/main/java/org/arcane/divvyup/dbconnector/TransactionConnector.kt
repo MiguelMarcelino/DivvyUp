@@ -120,4 +120,8 @@ class TransactionConnector @Inject constructor() : Connector<Transaction>  {
                 Log.w(TAG, "Error deleting transaction", e)
             }
     }
+
+    override fun searchItems(names: String): List<Transaction> {
+        TODO("Not yet implemented")
+    }
 }

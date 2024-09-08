@@ -111,4 +111,23 @@ class GroupConnector @Inject constructor() : Connector<Group> {
                 Log.w(ContentValues.TAG, "Error deleting group", e)
             }
     }
+
+    override fun searchItems(name: String): List<Group> {
+        val db = FirebaseFirestore.getInstance()
+        val deferred = CompletableDeferred<List<Group>>()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val documents = db.collection("groups").whereEqualTo("name", name).get().await()
+                val groups = documents.map { document ->
+                    document.toObject(Group::class.java)
+                }
+                deferred.complete(groups)
+            } catch (e: Exception) {
+                deferred.completeExceptionally(e)
+            }
+        }
+
+        return runBlocking { deferred.await() }
+    }
 }

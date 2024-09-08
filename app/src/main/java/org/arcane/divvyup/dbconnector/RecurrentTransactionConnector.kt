@@ -109,4 +109,8 @@ class RecurrentTransactionConnector @Inject constructor() : Connector<RecurrentT
                 Log.w(ContentValues.TAG, "Error deleting Recurrent Transaction", e)
             }
     }
+
+    override fun searchItems(names: String): List<RecurrentTransaction> {
+        TODO("Not yet implemented")
+    }
 }

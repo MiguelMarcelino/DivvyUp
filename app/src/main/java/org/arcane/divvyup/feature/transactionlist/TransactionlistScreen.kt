@@ -142,7 +142,7 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
                         title = item.title,
                         amount = item.amount.toString(),
                         icon = icon,
-                        date = item.createdAt.toString(),
+                        date = Utils.formatDateToHumanReadableForm(item.createdAt.seconds*1000),
                         color = if (item.type.value() > 0) Color.Green else Color.Red,
                         Modifier.animateItem(
                             fadeInSpec = null,
