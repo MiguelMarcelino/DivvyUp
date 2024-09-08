@@ -150,7 +150,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
 @Composable
 fun MultiFloatingActionButton(
     modifier: Modifier,
-    onAddExpenseClicked: () -> Unit
+    onAddTransactionClicked: () -> Unit
 ) {
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
@@ -166,7 +166,7 @@ fun MultiFloatingActionButton(
                     .clip(RoundedCornerShape(16.dp))
                     .background(color = Zinc)
                     .clickable {
-                        onAddExpenseClicked.invoke()
+                        onAddTransactionClicked.invoke()
                     },
                 contentAlignment = Alignment.Center
             ) {
