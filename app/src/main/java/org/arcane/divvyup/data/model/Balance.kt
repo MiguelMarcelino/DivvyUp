@@ -1,4 +1,4 @@
-package org.arcane.divvyup.data
+package org.arcane.divvyup.data.model
 
 data class Balance(
     val userUid: String,

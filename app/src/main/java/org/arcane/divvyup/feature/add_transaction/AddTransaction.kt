@@ -68,10 +68,10 @@ import org.arcane.divvyup.ui.theme.InterFontFamily
 import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Typography
 import org.arcane.divvyup.widget.TransactionTextView
-import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.data.model.Transaction
 import org.arcane.divvyup.data.model.RecurrenceInterval
+import org.arcane.divvyup.data.model.RecurrentTransaction
 import org.arcane.divvyup.data.model.TransactionType
-import org.arcane.divvyup.data.model.Recurrence
 import java.util.Date
 import java.util.Locale
 
@@ -162,8 +162,8 @@ fun AddExpense(
                 top.linkTo(nameRow.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            }, onAddExpenseClick = {
-                viewModel.onEvent(AddExpenseUiEvent.OnAddExpenseClicked(it))
+            }, onAddTransactionClick = { transaction, recurrentTransaction ->
+                viewModel.onEvent(AddExpenseUiEvent.OnAddExpenseClicked(transaction, recurrentTransaction))
             })
         }
     }
@@ -172,7 +172,7 @@ fun AddExpense(
 @Composable
 fun DataForm(
     modifier: Modifier,
-    onAddExpenseClick: (model: Transaction) -> Unit
+    onAddTransactionClick: (model: Transaction, recurrentTransaction: RecurrentTransaction?) -> Unit
 ) {
 
     val name = remember {
@@ -335,12 +335,6 @@ fun DataForm(
                     title = name.value,
                     amount = amount.value.toDoubleOrNull() ?: 0.0,
                     type = type.value.let { TransactionType.valueOf(it) },
-                    recurrence = Recurrence(
-                        interval = recurrenceInterval.value,
-                        endDate = Timestamp(
-                            Date(recurrenceDate.longValue)
-                        )
-                    ),
                     description = name.value,
                     currency = "",
                     status = "",
@@ -350,7 +344,17 @@ fun DataForm(
                     groupUid = "",
                     userUids = listOf(),
                 )
-                onAddExpenseClick(model)
+                val recurrentTransaction = when(isRecurrent.value) {
+                    true ->
+                        RecurrentTransaction(
+                            recurrenceInterval.value,
+                            Timestamp(
+                                Date(recurrenceDate.longValue)
+                            )
+                        )
+                    false -> null
+                }
+                onAddTransactionClick(model, recurrentTransaction)
             }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp)
         ) {
             TransactionTextView(

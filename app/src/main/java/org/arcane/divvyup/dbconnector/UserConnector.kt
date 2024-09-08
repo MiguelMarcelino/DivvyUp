@@ -2,7 +2,7 @@ package org.arcane.divvyup.dbconnector
 
 import android.content.ContentValues
 import android.util.Log
-import org.arcane.divvyup.data.User
+import org.arcane.divvyup.data.model.User
 import org.arcane.divvyup.data.identifiers.IIdentifier
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred

@@ -1,12 +1,12 @@
 package org.arcane.divvyup.logic
 
-import org.arcane.divvyup.data.Transaction
-import org.arcane.divvyup.data.User
+import org.arcane.divvyup.data.model.Transaction
+import org.arcane.divvyup.data.model.User
 import org.arcane.divvyup.data.identifiers.GroupIdentifier
 import com.google.firebase.Timestamp
-import org.arcane.divvyup.data.Debt
+import org.arcane.divvyup.data.model.Debt
 import org.arcane.divvyup.data.model.TransactionType
-import org.arcane.divvyup.data.model.Recurrence
+import org.arcane.divvyup.data.model.RecurrentTransaction
 import org.junit.Test
 import kotlin.math.abs
 
@@ -41,7 +41,6 @@ class TransactionCalculatorTest {
                 title = "Dinner",
                 amount = 100.0,
                 type = TransactionType.FOOD,
-                recurrence = Recurrence(),
                 description = "Dinner",
                 currency = "USD",
                 status = "paid",
@@ -57,7 +56,6 @@ class TransactionCalculatorTest {
                 title = "Taxi",
                 amount = 50.0,
                 type = TransactionType.TRANSPORTATION,
-                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
@@ -99,7 +97,6 @@ class TransactionCalculatorTest {
                 title = "Dinner",
                 amount = 100.0,
                 type = TransactionType.FOOD,
-                recurrence = Recurrence(),
                 description = "Dinner",
                 currency = "USD",
                 status = "paid",
@@ -115,7 +112,6 @@ class TransactionCalculatorTest {
                 title = "Taxi",
                 amount = 50.0,
                 type = TransactionType.TRANSPORTATION,
-                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
@@ -170,7 +166,6 @@ class TransactionCalculatorTest {
                 title = "Dinner",
                 amount = 50.0,
                 type = TransactionType.FOOD,
-                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
@@ -186,7 +181,6 @@ class TransactionCalculatorTest {
                 title = "Taxi",
                 amount = 50.0,
                 type = TransactionType.FOOD,
-                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",
@@ -235,7 +229,6 @@ class TransactionCalculatorTest {
                 title = "Dinner",
                 amount = 100.0,
                 type = TransactionType.FOOD,
-                recurrence = Recurrence(),
                 description = "Dinner",
                 currency = "USD",
                 status = "paid",
@@ -255,7 +248,6 @@ class TransactionCalculatorTest {
                 title = "Taxi",
                 amount = 50.0,
                 type = TransactionType.TRANSPORTATION,
-                recurrence = Recurrence(),
                 description = "Taxi",
                 currency = "USD",
                 status = "paid",

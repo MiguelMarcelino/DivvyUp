@@ -8,7 +8,7 @@ import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.dbconnector.TransactionConnector
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.data.model.Transaction
 import javax.inject.Inject
 
 @HiltViewModel

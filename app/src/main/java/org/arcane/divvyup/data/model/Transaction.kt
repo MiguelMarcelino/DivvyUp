@@ -1,8 +1,6 @@
-package org.arcane.divvyup.data
+package org.arcane.divvyup.data.model
 
 import com.google.firebase.Timestamp
-import org.arcane.divvyup.data.model.TransactionType
-import org.arcane.divvyup.data.model.Recurrence
 import java.util.UUID
 
 data class Transaction(
@@ -10,7 +8,6 @@ data class Transaction(
     var title: String,
     var amount: Double,
     var type: TransactionType,
-    var recurrence: Recurrence?,
     var description: String?,
     var currency: String,
     var status: String,
@@ -26,7 +23,6 @@ data class Transaction(
         title = "",
         amount = 0.0,
         type = TransactionType.OTHER,
-        recurrence = null,
         description = "",
         currency = "",
         status = "",
@@ -42,7 +38,6 @@ data class Transaction(
         title: String,
         amount: Double,
         type: TransactionType,
-        recurrence: Recurrence?,
         description: String?,
         currency: String,
         status: String,
@@ -56,7 +51,6 @@ data class Transaction(
         uid = UUID.randomUUID().toString(),
         amount = amount,
         type = type,
-        recurrence = recurrence,
         description = description,
         currency = currency,
         status = status,

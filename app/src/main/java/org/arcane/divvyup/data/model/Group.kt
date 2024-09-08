@@ -1,9 +1,6 @@
-package org.arcane.divvyup.data
+package org.arcane.divvyup.data.model
 
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.IgnoreExtraProperties
-import org.arcane.divvyup.data.identifiers.UserIdentifier
 import java.util.UUID
 
 data class Group(

@@ -5,7 +5,7 @@ import com.github.mikephil.charting.utils.EntryXComparator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.arcane.divvyup.base.BaseViewModel
 import org.arcane.divvyup.base.UiEvent
-import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.data.model.Transaction
 import org.arcane.divvyup.dbconnector.TransactionConnector
 import java.util.Collections
 import javax.inject.Inject

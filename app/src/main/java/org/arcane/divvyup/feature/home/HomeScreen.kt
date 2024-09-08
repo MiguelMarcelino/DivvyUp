@@ -42,7 +42,7 @@ import org.arcane.divvyup.ui.theme.Zinc
 import org.arcane.divvyup.widget.TransactionTextView
 import org.arcane.divvyup.base.HomeNavigationEvent
 import org.arcane.divvyup.base.NavigationEvent
-import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.data.model.Transaction
 import org.arcane.divvyup.ui.theme.Green
 import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Red

@@ -1,7 +1,7 @@
 package org.arcane.divvyup.utils
 
 import org.arcane.divvyup.R
-import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.data.model.Transaction
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat

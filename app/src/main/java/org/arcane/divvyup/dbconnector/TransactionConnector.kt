@@ -2,7 +2,7 @@ package org.arcane.divvyup.dbconnector
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.data.model.Transaction
 import org.arcane.divvyup.data.identifiers.IIdentifier
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
@@ -59,7 +59,6 @@ class TransactionConnector @Inject constructor() : Connector<Transaction>  {
             title = item.title,
             amount = item.amount,
             type = item.type,
-            recurrence = item.recurrence,
             description = item.description,
             currency = item.currency,
             status = item.status,
@@ -74,10 +73,10 @@ class TransactionConnector @Inject constructor() : Connector<Transaction>  {
         db.collection("transactions")
             .add(transaction)
             .addOnSuccessListener {
-                Log.d(TAG, "Expense added successfully")
+                Log.d(TAG, "transaction added successfully")
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding expense", e)
+                Log.w(TAG, "Error adding transaction", e)
             }
     }
 
@@ -100,10 +99,10 @@ class TransactionConnector @Inject constructor() : Connector<Transaction>  {
             .document(item.uid)
             .update(updates)
             .addOnSuccessListener {
-                Log.d(TAG, "Expense updated successfully")
+                Log.d(TAG, "transaction updated successfully")
             }
             .addOnFailureListener { e ->
-                Log.e(TAG, "Error updating expense", e)
+                Log.e(TAG, "Error updating transaction", e)
             }
     }
 
@@ -115,10 +114,10 @@ class TransactionConnector @Inject constructor() : Connector<Transaction>  {
             .document(identifier.uid)
             .delete()
             .addOnSuccessListener {
-                Log.d(TAG, "Expense deleted successfully")
+                Log.d(TAG, "transaction deleted successfully")
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error deleting expense", e)
+                Log.w(TAG, "Error deleting transaction", e)
             }
     }
 }

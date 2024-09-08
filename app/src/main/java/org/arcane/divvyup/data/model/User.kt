@@ -1,4 +1,4 @@
-package org.arcane.divvyup.data
+package org.arcane.divvyup.data.model
 
 import com.google.firebase.Timestamp
 import java.util.UUID

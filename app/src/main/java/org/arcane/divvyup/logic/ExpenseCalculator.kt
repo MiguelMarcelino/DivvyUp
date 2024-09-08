@@ -1,9 +1,9 @@
 package org.arcane.divvyup.logic
 
-import org.arcane.divvyup.data.Balance
-import org.arcane.divvyup.data.Debt
-import org.arcane.divvyup.data.Transaction
-import org.arcane.divvyup.data.User
+import org.arcane.divvyup.data.model.Balance
+import org.arcane.divvyup.data.model.Debt
+import org.arcane.divvyup.data.model.Transaction
+import org.arcane.divvyup.data.model.User
 import org.arcane.divvyup.data.identifiers.GroupIdentifier
 
 class ExpenseCalculator {

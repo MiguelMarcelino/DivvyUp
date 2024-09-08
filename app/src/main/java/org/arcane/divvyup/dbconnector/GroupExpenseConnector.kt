@@ -1,6 +1,6 @@
 package org.arcane.divvyup.dbconnector
 
-import org.arcane.divvyup.data.Transaction
+import org.arcane.divvyup.data.model.Transaction
 import org.arcane.divvyup.data.identifiers.GroupIdentifier
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
