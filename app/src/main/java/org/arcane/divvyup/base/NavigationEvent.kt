@@ -12,8 +12,11 @@ sealed class AddGroupNavigationEvent : NavigationEvent() {
     data object MenuOpenedClicked : AddGroupNavigationEvent()
 }
 
+sealed class GroupNavigationEvent : NavigationEvent() {
+    data object NavigateToAddGroup : GroupNavigationEvent()
+}
+
 sealed class HomeNavigationEvent : NavigationEvent() {
     data object NavigateToAddExpense : HomeNavigationEvent()
-    data object NavigateToAddGroup : HomeNavigationEvent()
     data object NavigateToSeeAll : HomeNavigationEvent()
 }

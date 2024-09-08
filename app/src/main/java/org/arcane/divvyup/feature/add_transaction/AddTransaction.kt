@@ -78,7 +78,7 @@ import java.util.Locale
 @Composable
 fun AddTransaction(
     navController: NavController,
-    viewModel: AddExpenseViewModel = hiltViewModel()
+    viewModel: AddTransactionViewModel = hiltViewModel()
 ) {
     val menuExpanded = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {

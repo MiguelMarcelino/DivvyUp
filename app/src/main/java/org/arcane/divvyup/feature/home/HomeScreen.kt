@@ -60,10 +60,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                     navController.navigate("/add_exp")
                 }
 
-                HomeNavigationEvent.NavigateToAddGroup -> {
-                    navController.navigate("/add_group")
-                }
-
                 else -> {}
             }
         }

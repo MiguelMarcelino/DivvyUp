@@ -1,6 +1,7 @@
 package org.arcane.divvyup.feature.add_group
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -12,6 +13,7 @@ import org.arcane.divvyup.data.model.Group
 import org.arcane.divvyup.dbconnector.GroupConnector
 import javax.inject.Inject
 
+@HiltViewModel
 class AddGroupViewModel @Inject constructor(private val groupConnector: GroupConnector) :
     BaseViewModel() {
 

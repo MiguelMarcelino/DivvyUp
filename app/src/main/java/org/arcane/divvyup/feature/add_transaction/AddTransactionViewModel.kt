@@ -16,7 +16,7 @@ import org.arcane.divvyup.dbconnector.TransactionConnector
 import javax.inject.Inject
 
 @HiltViewModel
-class AddExpenseViewModel @Inject constructor(private val transactionConnector: TransactionConnector, private val recurrentTransactionConnector: RecurrentTransactionConnector) :
+class AddTransactionViewModel @Inject constructor(private val transactionConnector: TransactionConnector, private val recurrentTransactionConnector: RecurrentTransactionConnector) :
     BaseViewModel() {
 
 

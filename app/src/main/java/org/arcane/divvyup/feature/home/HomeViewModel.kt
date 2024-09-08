@@ -29,12 +29,6 @@ class HomeViewModel @Inject constructor(private val transactionConnector: Transa
                     _navigationEvent.emit(HomeNavigationEvent.NavigateToSeeAll)
                 }
             }
-
-            is HomeUiEvent.OnAddGroupClicked -> {
-                viewModelScope.launch {
-                    _navigationEvent.emit(HomeNavigationEvent.NavigateToAddGroup)
-                }
-            }
         }
     }
 
@@ -75,15 +69,9 @@ class HomeViewModel @Inject constructor(private val transactionConnector: Transa
         }
         return Utils.formatCurrency(totalIncome)
     }
-
-    fun getGroups(): List<Group> {
-        // TODO: Get only user groups, not all groups
-        return groupConnector.getItems()
-    }
 }
 
 sealed class HomeUiEvent : UiEvent() {
     data object OnAddTransactionClicked : HomeUiEvent()
-    data object OnAddGroupClicked : HomeUiEvent()
     data object OnSeeAllClicked : HomeUiEvent()
 }

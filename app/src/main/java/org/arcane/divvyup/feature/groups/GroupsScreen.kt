@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,9 +31,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.firebase.Timestamp
 import org.arcane.divvyup.R
+import org.arcane.divvyup.base.GroupNavigationEvent
+import org.arcane.divvyup.base.NavigationEvent
 import org.arcane.divvyup.data.model.Group
-import org.arcane.divvyup.feature.home.HomeUiEvent
-import org.arcane.divvyup.feature.home.HomeViewModel
+import org.arcane.divvyup.feature.add_group.AddGroupUiEvent
 import org.arcane.divvyup.ui.theme.LightGrey
 import org.arcane.divvyup.ui.theme.Typography
 import org.arcane.divvyup.ui.theme.Zinc
@@ -40,7 +42,20 @@ import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.widget.TextView
 
 @Composable
-fun GroupsScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel()) {
+fun GroupsScreen(navController: NavController, viewModel: GroupsScreenViewModel = hiltViewModel()) {
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                NavigationEvent.NavigateBack -> navController.popBackStack()
+                GroupNavigationEvent.NavigateToAddGroup -> {
+                    navController.navigate("/add_group")
+                }
+
+                else -> {}
+            }
+        }
+    }
+
     Surface(modifier = Modifier.fillMaxSize()) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (_, list, card, _, add) = createRefs()
@@ -68,7 +83,7 @@ fun GroupsScreen(navController: NavController, viewModel: HomeViewModel = hiltVi
                     }, contentAlignment = Alignment.BottomEnd
             ) {
                 AddGroupActionButton(modifier = Modifier) {
-                    viewModel.onEvent(HomeUiEvent.OnAddTransactionClicked)
+                    viewModel.onEvent(GroupsUiEvent.OnAddGroupClicked)
                 }
             }
         }

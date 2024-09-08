@@ -94,7 +94,7 @@ fun AddGroup(
                             viewModel.onEvent(AddGroupUiEvent.OnBackPressed)
                         })
                 TextView(
-                    text = "New balance",
+                    text = "New Group",
                     style = Typography.titleLarge,
                     color = Color.White,
                     modifier = Modifier
@@ -194,6 +194,7 @@ fun DataForm(
                 focusedTextColor = Color.Black,
             )
         )
+        Spacer(modifier = Modifier.size(24.dp))
         TitleComponent(title = "description")
         OutlinedTextField(
             value = description.value,
@@ -223,7 +224,7 @@ fun DataForm(
             }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp)
         ) {
             TextView(
-                text = "Add Expense",
+                text = "Create Group",
                 fontSize = 14.sp,
                 color = Color.White
             )
