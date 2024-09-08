@@ -200,10 +200,15 @@ fun DataForm(
             value = description.value,
             onValueChange = { newValue ->
                 description.value = newValue
-            }, textStyle = TextStyle(color = Color.Black),
+            },
+            textStyle = TextStyle(color = Color.Black),
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            placeholder = { TextView(text = "Enter Name") },
+            placeholder = {
+                TextView(
+                    text = "Enter a short description",
+                )
+            },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Black,
                 unfocusedBorderColor = Color.Black,
