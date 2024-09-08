@@ -36,7 +36,7 @@ import org.arcane.divvyup.feature.add_transaction.DropDownMenu
 import org.arcane.divvyup.feature.home.TransactionItem
 import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.feature.home.HomeViewModel
-import org.arcane.divvyup.widget.TransactionTextView
+import org.arcane.divvyup.widget.TextView
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -52,7 +52,7 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
         else -> state
     }
 
-    val filteredByDateRange = filteredTransactions.filter { transaction ->
+    val filteredByDateRange = filteredTransactions.filter { _ ->
         // TODO: Apply date range filter logic here
         true
     }
@@ -75,7 +75,7 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
                 )
 
                 // Title
-                TransactionTextView(
+                TextView(
                     text = "Transactions",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -141,10 +141,14 @@ fun TransactionListScreen(navController: NavController, viewModel: HomeViewModel
                     TransactionItem(
                         title = item.title,
                         amount = item.amount.toString(),
-                        icon = icon!!,
+                        icon = icon,
                         date = item.createdAt.toString(),
                         color = if (item.type.value() > 0) Color.Green else Color.Red,
-                        Modifier.animateItemPlacement(tween(100))
+                        Modifier.animateItem(
+                            fadeInSpec = null,
+                            fadeOutSpec = null,
+                            placementSpec = tween(100)
+                        )
                     )
                 }
             }

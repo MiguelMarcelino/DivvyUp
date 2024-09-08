@@ -1,15 +1,19 @@
 package org.arcane.divvyup.base
 
 sealed class NavigationEvent {
-    object NavigateBack : NavigationEvent()
+    data object NavigateBack : NavigationEvent()
 }
 
-sealed class AddExpenseNavigationEvent : NavigationEvent() {
-    object MenuOpenedClicked : AddExpenseNavigationEvent()
+sealed class AddTransactionNavigationEvent : NavigationEvent() {
+    data object MenuOpenedClicked : AddTransactionNavigationEvent()
+}
+
+sealed class AddGroupNavigationEvent : NavigationEvent() {
+    data object MenuOpenedClicked : AddGroupNavigationEvent()
 }
 
 sealed class HomeNavigationEvent : NavigationEvent() {
-    object NavigateToAddExpense : HomeNavigationEvent()
-    object NavigateToAddIncome : HomeNavigationEvent()
-    object NavigateToSeeAll : HomeNavigationEvent()
+    data object NavigateToAddExpense : HomeNavigationEvent()
+    data object NavigateToAddGroup : HomeNavigationEvent()
+    data object NavigateToSeeAll : HomeNavigationEvent()
 }

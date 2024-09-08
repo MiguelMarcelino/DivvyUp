@@ -8,11 +8,13 @@ import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.dbconnector.TransactionConnector
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.arcane.divvyup.data.model.Group
 import org.arcane.divvyup.data.model.Transaction
+import org.arcane.divvyup.dbconnector.GroupConnector
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val transactionConnector: TransactionConnector) : BaseViewModel() {
+class HomeViewModel @Inject constructor(private val transactionConnector: TransactionConnector, private val groupConnector: GroupConnector) : BaseViewModel() {
 
     override fun onEvent(event: UiEvent) {
         when (event) {
@@ -25,6 +27,12 @@ class HomeViewModel @Inject constructor(private val transactionConnector: Transa
             is HomeUiEvent.OnSeeAllClicked -> {
                 viewModelScope.launch {
                     _navigationEvent.emit(HomeNavigationEvent.NavigateToSeeAll)
+                }
+            }
+
+            is HomeUiEvent.OnAddGroupClicked -> {
+                viewModelScope.launch {
+                    _navigationEvent.emit(HomeNavigationEvent.NavigateToAddGroup)
                 }
             }
         }
@@ -67,9 +75,15 @@ class HomeViewModel @Inject constructor(private val transactionConnector: Transa
         }
         return Utils.formatCurrency(totalIncome)
     }
+
+    fun getGroups(): List<Group> {
+        // TODO: Get only user groups, not all groups
+        return groupConnector.getItems()
+    }
 }
 
 sealed class HomeUiEvent : UiEvent() {
     data object OnAddTransactionClicked : HomeUiEvent()
+    data object OnAddGroupClicked : HomeUiEvent()
     data object OnSeeAllClicked : HomeUiEvent()
 }

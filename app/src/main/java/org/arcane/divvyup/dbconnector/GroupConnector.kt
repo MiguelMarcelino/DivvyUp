@@ -12,8 +12,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
+import javax.inject.Inject
 
-class GroupConnector : Connector<Group> {
+class GroupConnector @Inject constructor() : Connector<Group> {
 
     override fun <T : IIdentifier> getItem(identifier: T): Group? {
         val db = FirebaseFirestore.getInstance()

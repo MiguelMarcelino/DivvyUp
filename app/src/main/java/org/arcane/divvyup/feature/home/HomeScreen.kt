@@ -19,10 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,7 +35,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import org.arcane.divvyup.R
 import org.arcane.divvyup.ui.theme.Zinc
-import org.arcane.divvyup.widget.TransactionTextView
+import org.arcane.divvyup.widget.TextView
 import org.arcane.divvyup.base.HomeNavigationEvent
 import org.arcane.divvyup.base.NavigationEvent
 import org.arcane.divvyup.data.model.Transaction
@@ -62,6 +58,10 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
 
                 HomeNavigationEvent.NavigateToAddExpense -> {
                     navController.navigate("/add_exp")
+                }
+
+                HomeNavigationEvent.NavigateToAddGroup -> {
+                    navController.navigate("/add_group")
                 }
 
                 else -> {}
@@ -87,12 +87,12 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                     end.linkTo(parent.end)
                 }) {
                 Column(modifier = Modifier.align(Alignment.CenterStart)) {
-                    TransactionTextView(
+                    TextView(
                         text = "Good Afternoon",
                         style = Typography.bodyMedium,
                         color = Color.White
                     )
-                    TransactionTextView(
+                    TextView(
                         text = "CodeWithFK",
                         style = Typography.titleLarge,
                         color = Color.White
@@ -152,7 +152,6 @@ fun MultiFloatingActionButton(
     modifier: Modifier,
     onAddExpenseClicked: () -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
         Column(
@@ -201,13 +200,13 @@ fun CardItem(
                 .weight(1f)
         ) {
             Column {
-                TransactionTextView(
+                TextView(
                     text = "Total Balance",
                     style = Typography.titleMedium,
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.size(8.dp))
-                TransactionTextView(
+                TextView(
                     text = balance, style = Typography.headlineLarge, color = Color.White,
                 )
             }
@@ -255,12 +254,12 @@ fun TransactionList(
         item {
             Column {
                 Box(modifier = modifier.fillMaxWidth()) {
-                    TransactionTextView(
+                    TextView(
                         text = title,
                         style = Typography.titleLarge,
                     )
                     if (title == "Recent Transactions") {
-                        TransactionTextView(
+                        TextView(
                             text = "See all",
                             style = Typography.bodyMedium,
                             modifier = Modifier
@@ -314,12 +313,12 @@ fun TransactionItem(
             )
             Spacer(modifier = Modifier.size(8.dp))
             Column {
-                TransactionTextView(text = title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                TextView(text = title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 Spacer(modifier = Modifier.size(6.dp))
-                TransactionTextView(text = date, fontSize = 13.sp, color = LightGrey)
+                TextView(text = date, fontSize = 13.sp, color = LightGrey)
             }
         }
-        TransactionTextView(
+        TextView(
             text = amount,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
@@ -339,10 +338,10 @@ fun CardRowItem(modifier: Modifier, title: String, amount: String, imaget: Int) 
                 contentDescription = null,
             )
             Spacer(modifier = Modifier.size(8.dp))
-            TransactionTextView(text = title, style = Typography.bodyLarge, color = Color.White)
+            TextView(text = title, style = Typography.bodyLarge, color = Color.White)
         }
         Spacer(modifier = Modifier.size(4.dp))
-        TransactionTextView(text = amount, style = Typography.titleLarge, color = Color.White)
+        TextView(text = amount, style = Typography.titleLarge, color = Color.White)
     }
 }
 

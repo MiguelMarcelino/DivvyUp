@@ -1,6 +1,7 @@
 package org.arcane.divvyup.utils
 
 import org.arcane.divvyup.R
+import org.arcane.divvyup.data.model.Group
 import org.arcane.divvyup.data.model.Transaction
 import java.text.NumberFormat
 import java.text.ParseException
@@ -48,7 +49,7 @@ object Utils {
         var date = Date()
         val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         try {
-            date = formatter.parse(dateFormat)
+            date = formatter.parse(dateFormat)!!
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -62,6 +63,18 @@ object Utils {
         } else if (item.title == "Netflix") {
             R.drawable.ic_netflix
         } else if (item.title == "Starbucks") {
+            R.drawable.ic_starbucks
+        } else {
+            R.drawable.ic_upwork
+        }
+    }
+
+    fun getGroupIcon(item: Group): Int {
+        return if (item.name == "Paypal") {
+            R.drawable.ic_paypal
+        } else if (item.name == "Netflix") {
+            R.drawable.ic_netflix
+        } else if (item.name == "Starbucks") {
             R.drawable.ic_starbucks
         } else {
             R.drawable.ic_upwork

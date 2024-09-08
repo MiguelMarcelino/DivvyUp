@@ -28,7 +28,7 @@ import androidx.navigation.NavController
 import org.arcane.divvyup.R
 import org.arcane.divvyup.utils.Utils
 import org.arcane.divvyup.feature.home.TransactionList
-import org.arcane.divvyup.widget.TransactionTextView
+import org.arcane.divvyup.widget.TextView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -53,7 +53,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                 },
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.outline)
             )
-            TransactionTextView(
+            TextView(
                 text = "Statistics",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,

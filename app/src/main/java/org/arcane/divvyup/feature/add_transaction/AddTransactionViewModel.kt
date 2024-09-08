@@ -1,8 +1,7 @@
 package org.arcane.divvyup.feature.add_transaction
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import org.arcane.divvyup.base.AddExpenseNavigationEvent
+import org.arcane.divvyup.base.AddTransactionNavigationEvent
 import org.arcane.divvyup.base.BaseViewModel
 import org.arcane.divvyup.base.NavigationEvent
 import org.arcane.divvyup.base.UiEvent
@@ -41,7 +40,7 @@ class AddExpenseViewModel @Inject constructor(private val transactionConnector: 
 
     override fun onEvent(event: UiEvent) {
         when (event) {
-            is AddExpenseUiEvent.OnAddExpenseClicked -> {
+            is AddTransactionUiEvent.OnAddTransactionClicked -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
                         val result = addTransaction(event.transactionEntity)
@@ -56,29 +55,29 @@ class AddExpenseViewModel @Inject constructor(private val transactionConnector: 
                 }
             }
 
-            is AddExpenseUiEvent.OnBackPressed -> {
+            is AddTransactionUiEvent.OnBackPressed -> {
                 viewModelScope.launch {
                     _navigationEvent.emit(NavigationEvent.NavigateBack)
                 }
             }
 
-            is AddExpenseUiEvent.OnMenuClicked -> {
+            is AddTransactionUiEvent.OnMenuClicked -> {
                 viewModelScope.launch {
-                    _navigationEvent.emit(AddExpenseNavigationEvent.MenuOpenedClicked)
+                    _navigationEvent.emit(AddTransactionNavigationEvent.MenuOpenedClicked)
                 }
             }
         }
     }
 }
 
-sealed class AddExpenseUiEvent : UiEvent() {
-    data class OnAddExpenseClicked(
+sealed class AddTransactionUiEvent : UiEvent() {
+    data class OnAddTransactionClicked(
         val transactionEntity: Transaction,
         val recurrentTransaction: RecurrentTransaction?
-    ) : AddExpenseUiEvent()
+    ) : AddTransactionUiEvent()
 
-    data object OnBackPressed : AddExpenseUiEvent()
-    data object OnMenuClicked : AddExpenseUiEvent()
+    data object OnBackPressed : AddTransactionUiEvent()
+    data object OnMenuClicked : AddTransactionUiEvent()
 }
 
 

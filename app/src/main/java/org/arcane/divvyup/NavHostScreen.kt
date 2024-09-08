@@ -20,7 +20,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.arcane.divvyup.feature.add_transaction.AddExpense
+import org.arcane.divvyup.feature.add_group.AddGroup
+import org.arcane.divvyup.feature.add_transaction.AddTransaction
+import org.arcane.divvyup.feature.groups.GroupsScreen
 import org.arcane.divvyup.feature.home.HomeScreen
 import org.arcane.divvyup.feature.stats.StatsScreen
 import org.arcane.divvyup.feature.transactionlist.TransactionListScreen
@@ -39,6 +41,7 @@ fun NavHostScreen() {
                 navController = navController,
                 items = listOf(
                     NavItem(route = "/home", icon = R.drawable.ic_home),
+                    NavItem(route = "/groups", icon = R.drawable.ic_group),
                     NavItem(route = "/stats", icon = R.drawable.ic_stats)
                 )
             )
@@ -56,16 +59,27 @@ fun NavHostScreen() {
 
             composable(route = "/add_exp") {
                 bottomBarVisibility = false
-                AddExpense(navController)
+                AddTransaction(navController)
             }
 
             composable(route = "/stats") {
                 bottomBarVisibility = true
                 StatsScreen(navController)
             }
+
             composable(route = "/all_transactions") {
                 bottomBarVisibility = true // Show the bottom bar if you want it visible
                 TransactionListScreen(navController)
+            }
+
+            composable(route = "/groups") {
+                bottomBarVisibility = true
+                GroupsScreen(navController)
+            }
+
+            composable(route = "/add_group") {
+                bottomBarVisibility = false
+                AddGroup(navController)
             }
         }
     }
